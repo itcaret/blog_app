@@ -2,6 +2,7 @@
 require("../common/functions.php");
 
 session_start();
+
 $userId = $_SESSION['userId'];
 
 if (is_null($userId)) {
@@ -10,7 +11,6 @@ if (is_null($userId)) {
 
 $articles = get_articles();
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>

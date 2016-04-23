@@ -1,15 +1,18 @@
 <?php
 require("../common/functions.php");
 
-if (is_null($_POST['userId']) || $_POST['userId'] == '' || mb_strlen($_POST['title'], DEFAULT_ENCODE) > 20) {
-  send_error_page();
-}
-if (is_null($_POST['password']) || $_POST['password'] == '' || mb_strlen($_POST['title'], DEFAULT_ENCODE) > 20) {
+$userId = $_POST['userId'];
+$password = $_POST['password'];
+
+if (is_null($userId) || $userId == ''
+    || mb_strlen($userId, DEFAULT_ENCODE) > 20) {
   send_error_page();
 }
 
-$userId = $_POST['userId'];
-$password = $_POST['password'];
+if (is_null($password) || $password == ''
+    || mb_strlen($password, DEFAULT_ENCODE) > 20) {
+  send_error_page();
+}
 
 $result = login($userId, $password);
 if ($result){

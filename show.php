@@ -1,10 +1,11 @@
 <?php
 require("common/functions.php");
 
-if(is_null($_GET['id']) || !is_numeric($_GET['id'])) {
+$id = $_GET['id'];
+
+if(is_null($id) || !is_numeric($id)) {
   send_error_page();
 }
-$id = $_GET['id'];
 
 $article = get_article($id);
 if (is_null($article)){
@@ -21,10 +22,10 @@ if (is_null($article)){
 <body>
   <h1><?= BLOG_TITLE ?></h1>
   <hr>
-  <h2><?php echo htmlspecialchars($article['title']) ?></h2>
-  <h5>(<?php echo htmlspecialchars($article['date']) ?>)
-    by <?php echo htmlspecialchars($article['author']) ?></h5>
-  <div><?php echo nl2br(htmlspecialchars($article['body'])) ?></div>
+  <h2><?= htmlspecialchars($article['title']) ?></h2>
+  <h5>(<?= htmlspecialchars($article['date']) ?>)
+    by <?= htmlspecialchars($article['author']) ?></h5>
+  <div><?= nl2br(htmlspecialchars($article['body'])) ?></div>
   <hr>
   <a href="index.php">BACK</a>
 </body>

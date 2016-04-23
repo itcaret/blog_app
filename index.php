@@ -1,5 +1,5 @@
 <?php
-require("./common/functions.php");
+require("common/functions.php");
 $articles = get_articles();
 $articles = array_reverse($articles);
 ?>

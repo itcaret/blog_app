@@ -82,7 +82,7 @@ function save_article($new_article){
   $articles = get_articles();
   $articles[] = $new_article;
   $articles_json = json_encode($articles);
-  file_put_contents(ARTICLE_FILE, $articles_json);
+  file_put_contents(ARTICLE_FILE, $articles_json, LOCK_EX);
 }
 
 /**
@@ -98,7 +98,7 @@ function delete_article($id){
     }
   }
   $articles_json = json_encode($save_articles);
-  file_put_contents(ARTICLE_FILE, $articles_json);
+  file_put_contents(ARTICLE_FILE, $articles_json, LOCK_EX);
 }
 
 /**
@@ -117,7 +117,7 @@ function update_article($edit_article){
     }
   }
   $articles_json = json_encode($articles);
-  file_put_contents(ARTICLE_FILE, $articles_json);
+  file_put_contents(ARTICLE_FILE, $articles_json, LOCK_EX);
 }
 
 /**
