@@ -1,10 +1,10 @@
 <?php
-define('ARTICLE_FILE', '/Users/murayama/Desktop/article.json');
-define('USER_FILE', '/Users/murayama/Desktop/user.csv');
+define('ARTICLE_FILE', __DIR__ . '/../data/article.json');
+define('USER_FILE', __DIR__ . '/../data/user.csv');
 define('DEFAULT_ENCODE', 'UTF-8');
 define('BLOG_TITLE', 'Your Blog Title');
 define('ADMIN_BLOG_TITLE', 'Admin Your Blog Title');
-define('DOMAIN', 'http://localhost:18000/');
+define('DOMAIN', 'http://localhost:8000/');
 
 /**
  * リダイレクトする。

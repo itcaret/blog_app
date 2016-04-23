@@ -1,3 +1,7 @@
+<?php
+require("../common/functions.php");
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
