@@ -17,7 +17,7 @@ if (is_null($userId)) {
 </head>
 <body>
   <h1><?= ADMIN_BLOG_TITLE ?></h1>
-  <h6><?= htmlspecialchars($userId) ?></h6>
+  <h5><?= htmlspecialchars($userId) ?></h5>
   <hr>
   <form action="entry_post.php" method="post">
     <label>TITLE:</label><br>

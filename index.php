@@ -3,7 +3,6 @@ require("common/functions.php");
 $articles = get_articles();
 $articles = array_reverse($articles);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>

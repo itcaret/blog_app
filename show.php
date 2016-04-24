@@ -12,7 +12,6 @@ if (is_null($article)){
   send_error_page();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>

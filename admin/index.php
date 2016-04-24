@@ -19,7 +19,7 @@ $articles = get_articles();
 </head>
 <body>
   <h1><?= ADMIN_BLOG_TITLE ?></h1>
-  <h6><?= htmlspecialchars($userId) ?></h6>
+  <h5><?= htmlspecialchars($userId) ?></h5>
   <hr>
   <h2>Article List</h2>
   <table border="1">

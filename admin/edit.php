@@ -20,7 +20,6 @@ if(is_null($article)) {
   send_error_page();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +28,7 @@ if(is_null($article)) {
 </head>
 <body>
   <h1><?= ADMIN_BLOG_TITLE ?></h1>
-  <h6><?= htmlspecialchars($userId) ?></h6>
+  <h5><?= htmlspecialchars($userId) ?></h5>
   <hr>
   <form action="edit_post.php" method="post">
     <input type="hidden" name="id" value="<?= $article['id']?>">
