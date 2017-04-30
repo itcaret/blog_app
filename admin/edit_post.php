@@ -1,5 +1,5 @@
 <?php
-require("../common/functions.php");
+require('../common/functions.php');
 
 session_start();
 
@@ -13,7 +13,7 @@ $id = $_POST['id'];
 $title = $_POST['title'];
 $body = $_POST['body'];
 
-if (is_null($id) || !is_numeric($id)) {
+if (is_null($id) || !preg_match('/^([0-9]{1,5})$/', $id)) {
   send_error_page();
 }
 

@@ -1,5 +1,5 @@
 <?php
-require("../common/functions.php");
+require('../common/functions.php');
 
 session_start();
 
@@ -11,7 +11,7 @@ if (is_null($userId)) {
 
 $id = $_GET['id'];
 
-if(is_null($id) || !is_numeric($id)) {
+if(is_null($id) || !preg_match('/^([0-9]{1,5})$/', $id)) {
   send_error_page();
 }
 

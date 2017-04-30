@@ -1,9 +1,9 @@
 <?php
-require("common/functions.php");
+require('common/functions.php');
 
 $id = $_GET['id'];
 
-if(is_null($id) || !is_numeric($id)) {
+if(is_null($id) || !preg_match('/^([0-9]{1,5})$/', $id)) {
   send_error_page();
 }
 

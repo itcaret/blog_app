@@ -7,9 +7,9 @@ PHP初学者向けのアプリです。OOPやデータベースは使ってい�
 + 定数や関数はcommon/functions.phpで定義しています。
 + ログインエラーを除く、すべてのエラー（入力エラー含む）は、common/error.phpを表示します。
 
-<img src="https://dl.dropboxusercontent.com/u/141509/php_blog/demo1.png" width="300px">
+<img src="https://s3-ap-northeast-1.amazonaws.com/itcaret/php_blog/demo1.png" width="300px">
 
-<img src="https://dl.dropboxusercontent.com/u/141509/php_blog/demo2.png" width="300px">
+<img src="https://s3-ap-northeast-1.amazonaws.com/itcaret/php_blog/demo2.png" width="300px">
 
 ## Blogアプリの構成など
 
@@ -25,7 +25,7 @@ php -S localhost:18000
 
 記事の一覧表示、詳細表示機能を提供します。
 
-http://localhost:18000/index.php にアクセスします。
+http://localhost:8000/index.php にアクセスします。
 
 記事閲覧機能のPHPプログラムはルートディレクトリにあります。index.php、show.phpの2つです。
 
@@ -33,7 +33,7 @@ http://localhost:18000/index.php にアクセスします。
 
 記事の一覧表示、新規登録、更新、削除機能を提供します。
 
-http://localhost:18000/admin/login.php にアクセスします。
+http://localhost:8000/admin/login.php にアクセスします。
 
 記事管理機能のPHPプログラムはadminディレクトリにあります。
 

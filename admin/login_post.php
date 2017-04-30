@@ -1,5 +1,5 @@
 <?php
-require("../common/functions.php");
+require('../common/functions.php');
 
 $userId = $_POST['userId'];
 $password = $_POST['password'];
