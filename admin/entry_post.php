@@ -23,7 +23,6 @@ if (is_null($body) || $body == ''
 }
 
 $article = [];
-$article['id'] = get_new_article_id();
 $article['title'] = $title;
 $article['body'] = $body;
 $article['date'] = date('Y-m-d h:i:s');
