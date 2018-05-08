@@ -1,5 +1,5 @@
 <?php
-require('../common/functions.php');
+require($_SERVER['DOCUMENT_ROOT'] .'/../common/functions.php');
 
 session_start();
 

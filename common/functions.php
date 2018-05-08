@@ -1,6 +1,6 @@
 <?php
-define('ARTICLE_FILE', __DIR__ . '/../data/article.json');
-define('USER_FILE', __DIR__ . '/../data/user.csv');
+require_once($_SERVER['DOCUMENT_ROOT'] . "/../libs/smarty/libs/Smarty.class.php");
+
 define('DEFAULT_ENCODE', 'UTF-8');
 define('BLOG_TITLE', 'Your Blog Title');
 define('ADMIN_BLOG_TITLE', 'Admin Your Blog Title');
@@ -26,7 +26,12 @@ function redirect($path){
  * @param string $path リダイレクト先のパス
  */
 function send_error_page(){
-    header('location: ' . DOMAIN . 'common/error.php');
+
+    $smarty = new Smarty();
+    $smarty->template_dir = $_SERVER['DOCUMENT_ROOT'] . "/../smarty/templates/error/";
+    $smarty->compile_dir = $_SERVER['DOCUMENT_ROOT'] . "/../smarty/templates_c/";
+
+    $smarty->display("error.tpl");
     exit();
 }
 

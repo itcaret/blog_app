@@ -1,5 +1,6 @@
 <?php
-require('../common/functions.php');
+require($_SERVER['DOCUMENT_ROOT'] .'/../common/functions.php');
+$smarty = new Smarty();
 
 session_start();
 $userId = $_SESSION['userId'];

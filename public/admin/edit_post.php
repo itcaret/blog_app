@@ -1,5 +1,5 @@
 <?php
-require('../common/functions.php');
+require($_SERVER['DOCUMENT_ROOT'] .'/../common/functions.php');
 
 session_start();
 
@@ -27,7 +27,6 @@ if (is_null($body) || $body == ''
   send_error_page();
 }
 
-// $article = get_article($id);
 $article = [];
 $article['id'] = $id;
 $article['title'] = $title;
