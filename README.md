@@ -49,3 +49,25 @@ http://localhost:8000/admin/login.php にアクセスします。
 + JavaScriptやCSSといったクライアントサイドの実装。任意で追加実装してください。
 + ファイルの排他制御。正しく作るならデータベースを使うべきです。PHPでMySQLを使うならOOPの知識が必要です。
 + 厳密なセッション管理。ログアウト機能は実装していません。
+
+
+# DB情報
+## DB名
+myblog
+
+## テーブル
+article:記事
+use:ユーザー
+
+## テーブル詳細
+### article 
+id int(11) primary key auto increment
+title varchar(40) not null
+body varchar(400) not null
+date datetime not null
+author not null
+
+### user
+複合主キー
+id varchar(100) primary key
+password varchar(11) primary key
