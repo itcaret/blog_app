@@ -6,14 +6,18 @@ define('BLOG_TITLE', 'Your Blog Title');
 define('ADMIN_BLOG_TITLE', 'Admin Your Blog Title');
 define('DOMAIN', 'http://localhost:8000/');
 
+// DB情報
+define('DB_USER', 'root');
+define('DB_PASS', 'root');
+
 /**
  * リダイレクトする。
  * （処理を終了する）
  * @param string $path リダイレクト先のパス
  */
 function redirect($path){
-  header('location: ' . DOMAIN . $path);
-  exit();
+    header('location: ' . DOMAIN . $path);
+    exit();
 }
 
 /**
@@ -22,8 +26,8 @@ function redirect($path){
  * @param string $path リダイレクト先のパス
  */
 function send_error_page(){
-  header('location: ' . DOMAIN . 'common/error.php');
-  exit();
+    header('location: ' . DOMAIN . 'common/error.php');
+    exit();
 }
 
 /**
@@ -32,17 +36,26 @@ function send_error_page(){
  * @param string $password パスワード
  * @return bool ログイン成功の場合 true
  */
-function login($userId, $password) {
-  if (file_exists(USER_FILE)) {
-    $lines = file(USER_FILE, FILE_IGNORE_NEW_LINES);
-    foreach ($lines as $line) {
-      $user = explode(",", $line);
-      if ($userId == $user[0] && $password == $user[1]) {
-        return true;
-      }
+function login($userId, $password) { 
+   try{
+        // DBに接続
+        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $sql = "select * from user where id = ?";
+        $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->bindParam(1, $userId, PDO::PARAM_STR);
+        $sth->execute();
+        $result = $sth->fetch(PDO::FETCH_ASSOC);
+        if ($result){
+            if ($result['password'] === $password) {
+                return true;
+            }
+        } 
+        return false;
+    } catch (PDOException $e){
+        send_error_page();
+    } finally {
+        $dbh = null;
     }
-  }
-  return false;
 }
 
 /**
@@ -50,13 +63,22 @@ function login($userId, $password) {
  * @return array 記事の一覧
  */
 function get_articles(){
-  if (file_exists(ARTICLE_FILE)) {
-    $articles_json = file_get_contents(ARTICLE_FILE);
-    $articles = json_decode($articles_json, true);
-  }else{
-    $articles = [];
-  }
-  return $articles;
+    try{
+        // DBに接続
+        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $results = $dbh->query('select * from article');
+        $articles = [];
+        if ($results) {
+            foreach($results as $result) {
+                $articles[] = $result;
+            }
+        } 
+        return $articles;
+    } catch (PDOException $e){
+        send_error_page();
+    } finally {
+        $dbh = null;
+    }
 }
 
 /**
@@ -65,13 +87,20 @@ function get_articles(){
  * @return array 記事 存在しない場合 null
  */
 function get_article($id){
-  $articles = get_articles();
-  foreach ($articles as $article) {
-    if($article['id'] == $id){
-      return $article;
+   try{
+        // DBに接続
+        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $sql = "select * from article where id = ?";
+        $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->bindValue(1, $id, PDO::PARAM_INT);
+        $sth->execute();
+        $article = $sth->fetch(PDO::FETCH_ASSOC);
+        return $article;
+    } catch (PDOException $e){
+        send_error_page();
+    } finally {
+        $dbh = null;
     }
-  }
-  return null;
 }
 
 /**
@@ -79,10 +108,23 @@ function get_article($id){
  * @param array $new_article 新規記事
  */
 function save_article($new_article){
-  $articles = get_articles();
-  $articles[] = $new_article;
-  $articles_json = json_encode($articles);
-  file_put_contents(ARTICLE_FILE, $articles_json, LOCK_EX);
+   try{
+        // DBに接続
+        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $sql = "insert into article (title, body, date, author) value (?, ?, now(), ?)";
+        $sth = $dbh->prepare($sql);
+        $sth->bindParam(1, $new_article['title'], PDO::PARAM_STR);
+        $sth->bindParam(2, $new_article['body'], PDO::PARAM_STR);
+        $sth->bindParam(3, $new_article['author'], PDO::PARAM_STR);
+        $is_success = $sth->execute();
+        if (!$is_success){
+            send_error_page();
+        }
+    } catch (PDOException $e){
+        send_error_page();
+    } finally {
+        $dbh = null;
+    }
 }
 
 /**
@@ -90,15 +132,21 @@ function save_article($new_article){
  * @param string $id 削除対象の記事ID
  */
 function delete_article($id){
-  $articles = get_articles();
-  $save_articles = [];
-  foreach ($articles as $article) {
-    if($article['id'] != $id){
-      $save_articles[] = $article;
+    try{
+        // DBに接続
+        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $sql = "delete from article where id = ?";
+        $sth = $dbh->prepare($sql);
+        $sth->bindValue(1, $id, PDO::PARAM_INT);
+        $is_success = $sth->execute();
+        if (!$is_success){
+            send_error_page();
+        }
+    } catch (PDOException $e){
+        send_error_page();
+    } finally {
+        $dbh = null;
     }
-  }
-  $articles_json = json_encode($save_articles);
-  file_put_contents(ARTICLE_FILE, $articles_json, LOCK_EX);
 }
 
 /**
@@ -106,31 +154,24 @@ function delete_article($id){
  * @param string $id 更新対象の記事
  */
 function update_article($edit_article){
-  $articles = get_articles();
-  foreach ($articles as &$article) {
-    if($article['id'] == $edit_article['id']){
-      $article['title'] = $edit_article['title'];
-      $article['body'] = $edit_article['body'];
-      $article['date'] = $edit_article['date'];
-      $article['author'] = $edit_article['author'];
-      break;
-    }
-  }
-  $articles_json = json_encode($articles);
-  file_put_contents(ARTICLE_FILE, $articles_json, LOCK_EX);
-}
+    try{
+        // DBに接続
+        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $sql = "update article  set title = ?, body = ?, date = ?, author = ? where id = ?";
+        $sth = $dbh->prepare($sql);
+        $sth->bindParam(1, $edit_article['title'], PDO::PARAM_STR);
+        $sth->bindParam(2, $edit_article['body'], PDO::PARAM_STR);
+        $sth->bindParam(3, $edit_article['date'], PDO::PARAM_STR);
+        $sth->bindParam(4, $edit_article['author'], PDO::PARAM_STR);
+        $sth->bindValue(5, $edit_article['id'], PDO::PARAM_INT);
 
-/**
- * 最新の記事IDを取得する。
- * @return int 最新の記事ID
- */
-function get_new_article_id(){
-  $articles = get_articles();
-  $max = 0;
-  foreach ($articles as $article) {
-    if ($article['id'] > $max) {
-      $max = $article['id'];
+        $is_success = $sth->execute();
+        if (!$is_success){
+            send_error_page();
+        }
+    } catch (PDOException $e){
+        send_error_page();
+    } finally {
+        $dbh = null;
     }
-  }
-  return $max + 1;
 }
