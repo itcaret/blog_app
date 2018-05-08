@@ -7,6 +7,7 @@ define('ADMIN_BLOG_TITLE', 'Admin Your Blog Title');
 define('DOMAIN', 'http://localhost:8000/');
 
 // DB情報
+define('DB_DSN', 'mysql:host=localhost;dbname=myblog');
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
 
@@ -42,9 +43,9 @@ function send_error_page(){
  * @return bool ログイン成功の場合 true
  */
 function login($userId, $password) { 
-   try{
+    try{
         // DBに接続
-        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $dbh = new PDO(DB_DSN, DB_USER, DB_PASS);
         $sql = "select * from user where id = ?";
         $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->bindParam(1, $userId, PDO::PARAM_STR);
@@ -56,9 +57,7 @@ function login($userId, $password) {
             }
         } 
         return false;
-    } catch (PDOException $e){
-        send_error_page();
-    } finally {
+    }finally {
         $dbh = null;
     }
 }
@@ -70,7 +69,7 @@ function login($userId, $password) {
 function get_articles(){
     try{
         // DBに接続
-        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $dbh = new PDO(DB_DSN, DB_USER, DB_PASS);
         $results = $dbh->query('select * from article');
         $articles = [];
         if ($results) {
@@ -79,8 +78,6 @@ function get_articles(){
             }
         } 
         return $articles;
-    } catch (PDOException $e){
-        send_error_page();
     } finally {
         $dbh = null;
     }
@@ -92,17 +89,18 @@ function get_articles(){
  * @return array 記事 存在しない場合 null
  */
 function get_article($id){
-   try{
+    try{
         // DBに接続
-        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $dbh = new PDO(DB_DSN, DB_USER, DB_PASS);
         $sql = "select * from article where id = ?";
         $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->bindValue(1, $id, PDO::PARAM_INT);
         $sth->execute();
         $article = $sth->fetch(PDO::FETCH_ASSOC);
+        if (empty($article)) {
+            return null;
+        }
         return $article;
-    } catch (PDOException $e){
-        send_error_page();
     } finally {
         $dbh = null;
     }
@@ -113,9 +111,9 @@ function get_article($id){
  * @param array $new_article 新規記事
  */
 function save_article($new_article){
-   try{
+    try{
         // DBに接続
-        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $dbh = new PDO(DB_DSN, DB_USER, DB_PASS);
         $sql = "insert into article (title, body, date, author) value (?, ?, now(), ?)";
         $sth = $dbh->prepare($sql);
         $sth->bindParam(1, $new_article['title'], PDO::PARAM_STR);
@@ -125,8 +123,6 @@ function save_article($new_article){
         if (!$is_success){
             send_error_page();
         }
-    } catch (PDOException $e){
-        send_error_page();
     } finally {
         $dbh = null;
     }
@@ -139,7 +135,7 @@ function save_article($new_article){
 function delete_article($id){
     try{
         // DBに接続
-        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $dbh = new PDO(DB_DSN, DB_USER, DB_PASS);
         $sql = "delete from article where id = ?";
         $sth = $dbh->prepare($sql);
         $sth->bindValue(1, $id, PDO::PARAM_INT);
@@ -147,8 +143,6 @@ function delete_article($id){
         if (!$is_success){
             send_error_page();
         }
-    } catch (PDOException $e){
-        send_error_page();
     } finally {
         $dbh = null;
     }
@@ -156,12 +150,12 @@ function delete_article($id){
 
 /**
  * 記事を更新する。
- * @param string $id 更新対象の記事
+ * @param array $edit_article 更新対象の記事
  */
 function update_article($edit_article){
     try{
         // DBに接続
-        $dbh = new PDO("mysql:host=localhost;dbname=myblog", DB_USER, DB_PASS);
+        $dbh = new PDO(DB_DSN, DB_USER, DB_PASS);
         $sql = "update article  set title = ?, body = ?, date = ?, author = ? where id = ?";
         $sth = $dbh->prepare($sql);
         $sth->bindParam(1, $edit_article['title'], PDO::PARAM_STR);
@@ -174,8 +168,6 @@ function update_article($edit_article){
         if (!$is_success){
             send_error_page();
         }
-    } catch (PDOException $e){
-        send_error_page();
     } finally {
         $dbh = null;
     }

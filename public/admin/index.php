@@ -15,6 +15,10 @@ if (is_null($userId)) {
   send_error_page();
 }
 
-$articles = get_articles();
+try{
+    $articles = get_articles();
+} catch (PDOException $e) {
+    send_error_page();
+}
 $smarty->assign("articles", $articles);
 $smarty->display("index.tpl");

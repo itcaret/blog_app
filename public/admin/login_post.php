@@ -14,7 +14,12 @@ if (is_null($password) || $password == ''
   send_error_page();
 }
 
+try {
 $result = login($userId, $password);
+} catch (PDOException $e) {
+    send_error_page();
+}
+
 if ($result){
   session_start();
   $_SESSION['userId'] = $userId;

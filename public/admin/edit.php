@@ -17,8 +17,11 @@ $id = $_GET['id'];
 if(is_null($id) || !preg_match('/^([0-9]{1,5})$/', $id)) {
   send_error_page();
 }
-
-$article = get_article($id);
+try{
+    $article = get_article($id);
+} catch (PDOException $e) {
+    send_error_page();
+}
 if(is_null($article)) {
   send_error_page();
 }

@@ -15,6 +15,10 @@ if (is_null($id) || !preg_match('/^([0-9]{1,5})$/', $id)) {
   send_error_page();
 }
 
-delete_article($id);
+try{
+    delete_article($id);
+} catch (PDOException $e) {
+    send_error_page();
+}
 
 redirect('admin/index.php');

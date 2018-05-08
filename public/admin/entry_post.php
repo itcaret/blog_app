@@ -27,5 +27,9 @@ $article['title'] = $title;
 $article['body'] = $body;
 $article['date'] = date('Y-m-d h:i:s');
 $article['author'] = $userId;
-save_article($article);
+try{
+    save_article($article);
+} catch (PDOException $e) {
+    send_error_page();
+}
 redirect('admin/index.php');
